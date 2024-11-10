@@ -15,7 +15,8 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script:
             # Navigate to our simple-chat app directory in VPS
             cd /home/www/simple-chat
             
