@@ -1,38 +1,32 @@
-name: Deploy Backend
+name: Deploy to VPS
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - 'server/**'
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./server
-
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.8.0
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Add host key to known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Build and deploy to VPS
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-        run: |
-          ssh $VPS_USERNAME@$VPS_HOST 'cd $DEPLOY_PATH && git pull origin main'
-          ssh $VPS_USERNAME@$VPS_HOST 'cd $DEPLOY_PATH && docker-compose down'
-          ssh $VPS_USERNAME@$VPS_HOST 'cd $DEPLOY_PATH && docker-compose build'
-          ssh $VPS_USERNAME@$VPS_HOST 'cd $DEPLOY_PATH && docker-compose up -d'
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Navigate to our simple-chat app directory in VPS
+            cd /home/www/simple-chat
+            
+            git pull origin main
+            
+            # Build and restart Docker container
+            docker build -t simple-chat .
+            docker stop simple-chat || true
+            docker rm simple-chat || true
+            docker run -d \
+              --name simple-chat \
+              --restart unless-stopped \
+              -p 3000:3000 \
+              simple-chat
