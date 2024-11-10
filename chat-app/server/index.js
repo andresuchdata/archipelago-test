@@ -5,7 +5,8 @@ const io = require('socket.io')(http, {
   cors: {
     origin: [
       "http://localhost:5173",
-      "http://simple-chat-arch.s3-website-ap-southeast-1.amazonaws.com"
+      "http://simple-chat-arch.s3-website-ap-southeast-1.amazonaws.com",
+      "playful-frangollo-541c96.netlify.app"
     ],
     methods: ["GET", "POST"]
   }
