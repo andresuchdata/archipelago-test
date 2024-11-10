@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
@@ -24,10 +26,10 @@ jobs:
             # Check if .git directory exists
             if [ ! -d ".git" ]; then
               # Clone repository if it doesn't exist
-              git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/andresuch/archipelago-test.git .
+              git clone https://x-access-token:${GITHUB_TOKEN}@github.com/andresuch/archipelago-test.git .
             else
               # Pull latest changes if repo exists
-              git pull https://${{ secrets.GITHUB_TOKEN }}@github.com/andresuch/archipelago-test.git main
+              git pull origin main
             fi
 
             # Continue with Docker operations
