@@ -17,24 +17,14 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            # Ensure the .ssh directory exists on the VPS
-            mkdir -p ~/.ssh
-
-            # Add the SSH private key to the VPS
-            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-            chmod 600 ~/.ssh/id_rsa
-
-            # Add GitHub to known_hosts on the VPS
-            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-
             # Create directory if it doesn't exist
             mkdir -p /home/www/archipelago-test
             cd /home/www/archipelago-test
 
             # Check if .git directory exists
             if [ ! -d ".git" ]; then
-              # Clone repository if it doesn't exist
-              git clone git@github.com:andresuchdata/archipelago-test.git .
+              # Clone repository using HTTPS instead of SSH
+              git clone https://github.com/andresuchdata/archipelago-test.git .
             else
               # Pull latest changes if repo exists
               git pull origin main
