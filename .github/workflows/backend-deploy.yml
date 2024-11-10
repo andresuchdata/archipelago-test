@@ -23,10 +23,13 @@ jobs:
 
             # Check if .git directory exists
             if [ ! -d ".git" ]; then
-              # Clone repository using HTTPS instead of SSH
-              git clone https://github.com/andresuchdata/archipelago-test.git .
+              echo "Cloning repository..."
+              # Clone repository using HTTPS with token
+              git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/andresuchdata/archipelago-test.git .
             else
-              # Pull latest changes if repo exists
+              echo "Repository exists, pulling updates..."
+              # Configure remote with token and pull
+              git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/andresuchdata/archipelago-test.git
               git pull origin main
             fi
 
