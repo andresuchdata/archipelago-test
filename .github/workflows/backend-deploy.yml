@@ -16,13 +16,9 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          script:
-            # Navigate to our simple-chat app directory in VPS
+          script: |
             cd /home/www/simple-chat
-            
             git pull origin main
-            
-            # Build and restart Docker container
             docker build -t simple-chat .
             docker stop simple-chat || true
             docker rm simple-chat || true
