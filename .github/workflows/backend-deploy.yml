@@ -17,13 +17,25 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            cd /home/www/simple-chat
-            git pull origin main
-            docker build -t simple-chat .
-            docker stop simple-chat || true
-            docker rm simple-chat || true
+            # Create directory if it doesn't exist
+            mkdir -p /home/www/archipelago-test
+            cd /home/www/archipelago-test
+
+            # Check if .git directory exists
+            if [ ! -d ".git" ]; then
+              # Clone repository if it doesn't exist
+              git clone https://github.com/andresuch/archipelago-test.git .
+            else
+              # Pull latest changes if repo exists
+              git pull origin main
+            fi
+
+            # Continue with Docker operations
+            docker build -t archipelago-test .
+            docker stop archipelago-test || true
+            docker rm archipelago-test || true
             docker run -d \
-              --name simple-chat \
+              --name archipelago-test \
               --restart unless-stopped \
               -p 3000:3000 \
               simple-chat
