@@ -21,6 +21,9 @@ jobs:
         
       - name: Build
         working-directory: ./chat-app
+        env:
+          VITE_SOCKET_HOST: ${{ secrets.VITE_SOCKET_HOST }}
+          VITE_AVATAR_URL: ${{ secrets.VITE_AVATAR_URL }}
         run: npm run build
         
       - name: Configure AWS Credentials
