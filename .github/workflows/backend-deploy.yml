@@ -24,11 +24,9 @@ jobs:
             # Check if .git directory exists
             if [ ! -d ".git" ]; then
               echo "Cloning repository..."
-              # Clone repository using HTTPS with token
               git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/andresuchdata/archipelago-test.git .
             else
               echo "Repository exists, pulling updates..."
-              # Configure remote with token and pull
               git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/andresuchdata/archipelago-test.git
               git pull origin main
             fi
@@ -41,4 +39,5 @@ jobs:
               --name archipelago-test \
               --restart unless-stopped \
               -p 3000:3000 \
+              -e ALLOWED_ORIGINS=${{ secrets.ALLOWED_ORIGINS }} \
               archipelago-test
