@@ -6,8 +6,7 @@ const io = require('socket.io')(http, {
     origin: [
       "http://localhost:5173",
       "http://simple-chat-arch.s3-website-ap-southeast-1.amazonaws.com",
-      "https://simple-chat-be.andresuchitra.com",
-      "https://your-netlify-app-name.netlify.app"
+      "https://simple-chat-arch.netlify.app"
     ],
     methods: ["GET", "POST"],
     credentials: true
