@@ -6,9 +6,11 @@ const io = require('socket.io')(http, {
     origin: [
       "http://localhost:5173",
       "http://simple-chat-arch.s3-website-ap-southeast-1.amazonaws.com",
-      "https://simple-chat-be.andresuchitra.com"
+      "https://simple-chat-be.andresuchitra.com",
+      "https://your-netlify-app-name.netlify.app"
     ],
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST"],
+    credentials: true
   },
   allowEIO3: true,
   transports: ['websocket', 'polling']
